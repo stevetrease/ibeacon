@@ -1,0 +1,14 @@
+{
+    "port": 8501,
+    "mqtt":
+    {
+        "host": "mqtt.trease.eu",
+        "port": "1883"
+    },
+    "redis":
+    {
+        "host": "redis.trease.eu",
+        "port": "6379"
+    }
+}
+
