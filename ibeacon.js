@@ -28,7 +28,7 @@ app.get('/', function(req, res) {
 
 
 
-
+// dealing with ibeacon stuff
 app.post('/ibeacon', function(req, res) {
 	var now = new Date();
 
@@ -59,43 +59,20 @@ app.post('/ibeacon', function(req, res) {
 
 
 
-app.post('/', function(req, res) {
+app.post('/swiftpush', function(req, res) {
 	var now = new Date();
-
-	// deal with posts from Beecon app
-	var region = req.body.region;
-	var beacon = req.body.beacon;
-	var action = req.body.action;
-	var distance = req.body.distance;
-	var major = req.body.major;
-	var minor = req.body.minor;
-	var device = req.body.device;
-
-	if (device != null ) console.log (device);
-
-	if (region != null ) { 
-		if (beacon != null ) { 
-			res.writeHead(200, {'Content-Type': 'text/plain'});
-  			res.end(region + " " + action);
-			console.log("beacon " + req.connection.remoteAddress + " " + region + "," + beacon + "," + major + "," + minor + " " + distance);
-		} else {
-			res.writeHead(200, {'Content-Type': 'text/plain'});
-  			res.end(region + " " + action);
-			console.log("region " + req.connection.remoteAddress + " " + region + " " + action);
-		}
-	}
 
 	// record and post new Swift Push token
 	var token = req.body.token;
-	var ddevice = req.body.device;
+	var device = req.body.device;
 	if (token != null) { 
 		redisClient.sadd("push-tokens", token);
 		redisClient.publish("push-tokens-change", token);
 		
 		res.writeHead(200, {'Content-Type': 'text/plain'});
  		
-		if (ddevice != null)
-			console.log(req.connection.remoteAddress + " " + 'POST ' + ddevice + " with " + token + " " + now);
+		if (device != null)
+			console.log(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " " + now);
 	
 		res.end("Token is " + token);
 	}
