@@ -65,17 +65,16 @@ app.post('/swiftpush', function(req, res) {
 	// record and post new Swift Push token
 	var token = req.body.token;
 	var device = req.body.device;
-	if (token != null) { 
-		redisClient.sadd("push-tokens", token);
-		redisClient.publish("push-tokens-change", token);
+	 
+	redisClient.sadd("push-tokens", token);
+	redisClient.sadd("push-tokens-devices", JSON.stringify({token: token, device: device}));
+	redisClient.publish("push-tokens-change", token);
 		
-		res.writeHead(200, {'Content-Type': 'text/plain'});
- 		
-		if (device != null)
-			console.log(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " " + now);
+	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " at " + now);
 	
-		res.end("Token is " + token);
-	}
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.end(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " at " + now);
+
 });
 
 app.listen(config.port);
