@@ -15,6 +15,14 @@ function log(type) {
     }
 }
 
+
+var mqtt = require('mqtt');
+var mqttclient = mqtt.createClient(parseInt(config.mqtt.port, 10), config.mqtt.host, function(err, client) {
+		keepalive: 1000
+});
+
+
+
 var app = express();
 app.use(bodyParser());
 
@@ -39,9 +47,6 @@ app.post('/ibeacon', function(req, res) {
 	var distance = req.body.distance;
 	var major = req.body.major;
 	var minor = req.body.minor;
-	var device = req.body.device;
-
-	if (device != null ) console.log (device);
 
 	if (region != null ) { 
 		if (beacon != null ) { 
@@ -71,6 +76,8 @@ app.post('/swiftpush', function(req, res) {
 	redisClient.publish("push-tokens-change", token);
 		
 	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " at " + now);
+	
+	mqttclient.publish("push/alert", "token registration from " + device);
 	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " at " + now);
