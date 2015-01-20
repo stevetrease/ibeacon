@@ -1,0 +1,15 @@
+[Unit]
+Description=iBeaon service
+After=mosquitto.service
+Requires=mosquitto.service
+
+[Service]
+ExecStart=/home/steve/ibeacon/ibeacon.sh
+WorkingDirectory=/home/steve/ibeacon
+Environment=NODE_ENV=production
+Type=simple
+User=steve
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
