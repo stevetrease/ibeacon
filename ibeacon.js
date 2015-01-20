@@ -1,4 +1,18 @@
-var config = require('./config.json');
+console.log("process.env.NODE_ENV:" + process.env.NODE_ENV);
+switch (process.env.NODE_ENV) {
+	case 'development':
+		console.log ("production mode");
+		var config = require('./config.json');
+		break;
+	case 'production':
+	default:	
+		console.log ("development mode");
+		var config = require('./config.json');
+}
+
+
+
+
 var http = require('http');
 var redis = require('redis')
    ,redisClient = redis.createClient(parseInt(config.redis.port,10), config.redis.host);
