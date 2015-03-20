@@ -85,13 +85,14 @@ app.post('/swiftpush', function(req, res) {
 	var token = req.body.token;
 	var device = req.body.device;
 	var mode = req.body.mode;
+	var version = req.body.version;
 	 
 	redisClient.sadd("push-tokens-devices", JSON.stringify({token: token, device: device}));
 	redisClient.publish("push-tokens-change", token);
 		
 	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " in mode " + mode + " at " + now);
 	
-	mqttclient.publish("push/alert", "token registration from " + device);
+	mqttclient.publish("push/alert", "token registration from " + device + " running build " + version);
 	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " at " + now);
