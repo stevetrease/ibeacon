@@ -79,7 +79,7 @@ app.post('/ibeacon', function(req, res) {
 
 
 app.post('/swiftpush', function(req, res) {
-	var now = new Date();
+	// ar now = new Date();
 
 	// record and post new Swift Push token
 	var token = req.body.token;
@@ -87,7 +87,7 @@ app.post('/swiftpush', function(req, res) {
 	var mode = req.body.mode;
 	var version = req.body.version;
 	
-	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " in mode " + mode + " at " + now)
+	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " (" + version + ") with " + token + " in mode " + mode)
 	
 	if (mode == "sandboxReceipt") {
 		redisClient.sadd("push-tokens-devices-sand", JSON.stringify({token: token, device: device}));
@@ -99,10 +99,10 @@ app.post('/swiftpush', function(req, res) {
 		redisClient.publish("push-tokens-change", token);
 	}
 	
-	mqttclient.publish("push/alert", "token registration from " + device + " in mode " + mode + " at " + now);
+	mqttclient.publish("push/alert", "token registration from " + device + " (" + version + ") in mode " + mode);
 	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " in mode " + mode + " at " + now);
+	res.end(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " in mode " + mode);
 
 });
 
