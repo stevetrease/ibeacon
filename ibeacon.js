@@ -90,17 +90,19 @@ app.post('/swiftpush', function(req, res) {
 	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " in mode " + mode + " at " + now)
 	
 	if (mode == "sandboxReceipt") {
-		redisClient.sadd("push-sandbox-tokens-devices", JSON.stringify({token: token, device: device}));
-		redisClient.publish("push-sandbox-tokens-change", token);
+		redisClient.sadd("push-tokens-devices-sand", JSON.stringify({token: token, device: device}));
+		redisClient.sadd("push-tokens-devices", JSON.stringify({token: token, device: device}));
+		redisClient.publish("push-tokens-change", token);
 	} else {
+		redisClient.sadd("push-tokens-devices-sand", JSON.stringify({token: token, device: device}));
 		redisClient.sadd("push-tokens-devices", JSON.stringify({token: token, device: device}));
 		redisClient.publish("push-tokens-change", token);
 	}
 	
-	mqttclient.publish("push/alert", "token registration from " + device + " running build " + version);
+	mqttclient.publish("push/alert", "token registration from " + device + " in mode " + mode + " at " + now);
 	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " at " + now);
+	res.end(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " in mode " + mode + " at " + now);
 
 });
 
