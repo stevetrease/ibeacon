@@ -31,9 +31,7 @@ function log(type) {
 
 
 var mqtt = require('mqtt');
-var mqttclient = mqtt.createClient(parseInt(config.mqtt.port, 10), config.mqtt.host, function(err, client) {
-		keepalive: 1000
-});
+var mqttclient = mqtt.connect(config.mqtt.host);
 
 
 
@@ -79,8 +77,6 @@ app.post('/ibeacon', function(req, res) {
 
 
 app.post('/swiftpush', function(req, res) {
-	// ar now = new Date();
-
 	// record and post new Swift Push token
 	var token = req.body.token;
 	var device = req.body.device;
@@ -107,4 +103,3 @@ app.post('/swiftpush', function(req, res) {
 });
 
 app.listen(config.port);
-console.log('Server running on ' + config.port);
