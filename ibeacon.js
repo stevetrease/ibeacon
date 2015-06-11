@@ -109,10 +109,10 @@ app.post('/battery', function(req, res) {
 	var batterystate = req.body.batterystate;
 	var batterylevel = req.body.batterylevel;
 	
-	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " " + batterylevel + " " + batterystate);
+	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " " + batterystate + " " + batterylevel);
 	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(req.connection.remoteAddress + " "  + 'POST ' + device + " " + batterylevel + " " + batterystate);
+	res.end(req.connection.remoteAddress + " "  + 'POST ' + device + " " + batterystate + " " + batterylevel);
 });
 
 
