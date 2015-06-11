@@ -102,4 +102,19 @@ app.post('/swiftpush', function(req, res) {
 
 });
 
+
+app.post('/battery', function(req, res) {
+	// record and post new Swift Push token
+	var device = req.body.device;
+	var batterystate = req.body.batterystate;
+	var batterylevel = req.body.batterylevel;
+	
+	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " " + batterylevel + " " + batterystate);
+	
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.end(req.connection.remoteAddress + " "  + 'POST ' + device + " " + batterylevel + " " + batterystate);
+});
+
+
+
 app.listen(config.port);
