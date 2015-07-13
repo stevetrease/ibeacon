@@ -113,6 +113,8 @@ app.post('/battery', function(req, res) {
 	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end(req.connection.remoteAddress + " "  + 'POST ' + device + " " + batterystate + " " + batterylevel);
+	
+	mqttclient.publish("sensors/iosbattery/" + device, batterylevel);
 });
 
 
