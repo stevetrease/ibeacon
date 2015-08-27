@@ -83,7 +83,7 @@ app.post('/swiftpush', function(req, res) {
 	var mode = req.body.mode;
 	var version = req.body.version;
 	
-	console.log(req.connection.remoteAddress + " " + 'POST ' + device + " (" + version + ") with " + token + " in mode " + mode)
+	console.log(req.connection.remoteAddress + " " + 'POST token registration from ' + device + " (" + version + ") with " + token + " in mode " + mode)
 	
 	if (mode == "sandboxReceipt") {
 		redisClient.sadd("push-tokens-devices-sand", JSON.stringify({token: token, device: device}));
@@ -104,12 +104,12 @@ app.post('/swiftpush', function(req, res) {
 
 
 app.post('/battery', function(req, res) {
-	// record and post new Swift Push token
 	var device = req.body.device;
 	var batterystate = req.body.batterystate;
 	var batterylevel = req.body.batterylevel;
+	var reason = req.body.reason; 
 	
-	console.log(req.connection.remoteAddress + " " + 'POST ' + batterylevel + " " + batterystate + " " + device);
+	console.log(req.connection.remoteAddress + " " + 'POST battery level of ' + batterylevel + " " + batterystate + " " + device + " (" + reason + ")");
 	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end(req.connection.remoteAddress + " "  + 'POST ' + batterylevel + " " + batterystate + " " + device);
