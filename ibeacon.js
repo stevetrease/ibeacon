@@ -106,13 +106,13 @@ app.post('/swiftpush', function(req, res) {
 app.post('/battery', function(req, res) {
 	var device = req.body.device;
 	var batterystate = req.body.batterystate;
-	var batterylevel = req.body.batterylevel;
+	var batterylevel = parseFloat(req.body.batterylevel);
 	var reason = req.body.reason; 
 	
-	console.log(req.connection.remoteAddress + " " + 'POST battery level of ' + batterylevel + " " + batterystate + " " + device + " (" + reason + ")");
+	console.log(req.connection.remoteAddress + " " + 'POST battery level of ' + batterylevel.toFixed(2) + " " + batterystate + " " + device + " (" + reason + ")");
 	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(req.connection.remoteAddress + " "  + 'POST ' + batterylevel + " " + batterystate + " " + device);
+	res.end(req.connection.remoteAddress + " "  + 'POST ' + batterylevel.toFixed(2) + " " + batterystate + " " + device);
 	
 	mqttclient.publish("sensors/iosbattery/" + device, batterylevel);
 });
