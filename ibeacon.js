@@ -13,14 +13,6 @@ switch (process.env.NODE_ENV) {
 
 
 var topicHistory = {};
-topicHistory['sensors/humidity/jeenode-11'] = 0;
-topicHistory['sensors/humidity/jeenode-15'] = 0;
-topicHistory['sensors/temperature/jeenode-11'] = 0;
-topicHistory['sensors/temperature/jeenode-15'] = 0;
-topicHistory['sensors/temperature/attic'] = 0;
-topicHistory['sensors/temperature/garage'] = 0;
-
-
 
 var http = require('http');
 var redis = require('redis')
@@ -150,47 +142,6 @@ app.get('/sensors/*', function(req, res) {
 	}
 });	
 	
-
-
-/*
-app.get('/sensor/rh/utilityroom.htm', function(req, res) {
-	var value = topicHistory['sensors/humidity/jeenode-11'];
-	console.log(req.connection.remoteAddress + " " + "GET rh/utility room " + value);	
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(value.toString());
-});
-app.get('/sensor/rh/study.htm', function(req, res) {
-	var value = topicHistory['sensors/humidity/jeenode-15'];
-	console.log(req.connection.remoteAddress + " " + "GET rh/study " + value);	
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(value.toString());
-});
-
-app.get('/sensor/temp/attic.htm', function(req, res) {
-	var value = topicHistory['sensors/temperature/attic'];
-	console.log(req.connection.remoteAddress + " " + "GET temp/attic " + value);	
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(value.toString());
-});
-app.get('/sensor/temp/study.htm', function(req, res) {
-	var value = topicHistory['sensors/temperature/jeenode-15'];
-	console.log(req.connection.remoteAddress + " " + "GET temp/study " + value);	
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(value.toString());
-});
-app.get('/sensor/temp/utilityroom.htm', function(req, res) {
-	var value = topicHistory['sensors/temperature/jeenode-11'];
-	console.log(req.connection.remoteAddress + " " + "GET temp/utilityroom " + value);	
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(value.toString());
-});
-app.get('/sensor/temp/garage.htm', function(req, res) {
-	var value = topicHistory['sensors/temperature/garage'];
-	console.log(req.connection.remoteAddress + " " + "GET temp/garage " + value);	
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(value.toString());
-});*/
-
 
 
 var mqtt = require('mqtt');
