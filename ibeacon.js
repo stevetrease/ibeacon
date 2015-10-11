@@ -131,11 +131,28 @@ app.post('/arduino', function(req, res) {
 	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end(req.connection.remoteAddress + " " + "POST " + device + " " + sensor + " " + value);
-
 	console.log(req.connection.remoteAddress + " " + "POST " + device + " " + sensor + " " + value);
 });
 
+app.get('/sensors/*', function(req, res) {
+	var topic = req.path.slice(1,req.path.length); 
+	// console.log(topic + "     " + topicHistory[topic]);
+	if(typeof topicHistory[topic] === 'undefined') {
+		// topic does NOT exist	
+		console.log(req.connection.remoteAddress + " " + "GET " + topic + " does not exist");
+		res.writeHead(404, {'Content-Type': 'text/plain'});
+		res.end(req.path + " does not exist\n");	
+	} else {
+		var value = topicHistory[topic];
+		console.log(req.connection.remoteAddress + " " + "GET " + topic + " " + value);	
+		res.writeHead(200, {'Content-Type': 'text/plain'});
+		res.end(value.toString());
+	}
+});	
+	
 
+
+/*
 app.get('/sensor/rh/utilityroom.htm', function(req, res) {
 	var value = topicHistory['sensors/humidity/jeenode-11'];
 	console.log(req.connection.remoteAddress + " " + "GET rh/utility room " + value);	
@@ -172,7 +189,7 @@ app.get('/sensor/temp/garage.htm', function(req, res) {
 	console.log(req.connection.remoteAddress + " " + "GET temp/garage " + value);	
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end(value.toString());
-});
+});*/
 
 
 
@@ -180,12 +197,12 @@ var mqtt = require('mqtt');
 var mqttclient = mqtt.connect(config.mqtt.host);
 
 mqttclient.on('connect', function() {
-    mqttclient.subscribe('sensors/temperature/+');
-    mqttclient.subscribe('sensors/humidity/+');
+    mqttclient.subscribe('sensors/+/+');
         
     mqttclient.on('message', function(topic, message) {    
 	    var value = Number(message);
         topicHistory[topic] = value;
+        // console.log ("adding " + topic);
     });
 });
 
