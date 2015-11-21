@@ -142,6 +142,16 @@ app.get('/sensors/*', function(req, res) {
 	}
 });	
 	
+app.get('/light/*', function(req, res) {
+	var topic = req.path.slice(1,req.path.length); 
+	console.log (req.path);
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.end();
+});	
+	
+	
+	
+	
 
 
 var mqtt = require('mqtt');
