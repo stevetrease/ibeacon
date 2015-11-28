@@ -148,6 +148,33 @@ app.get('/light/*', function(req, res) {
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end();
 });	
+app.get('/lightrgb/*', function(req, res) {
+	var tags = req.path.split("/");
+	
+	var node = tags[2];
+	var mode = tags[3];
+	var rgb = tags[4];
+		
+	switch(mode) {
+    	case "on":
+        	console.log("node: " + node + " on");
+        	mqttclient.publish("photon/" + node, "ffffff");
+			break;
+		case "off":
+			console.log("node: " + node + " off");
+			mqttclient.publish("photon/" + node, "000000");
+			break;
+		case "rgb":
+			console.log("node: " + node + rgb);
+			mqttclient.publish("photon/" + node, rgb);
+			break;
+		default:
+        	console.log ("unknown mode: " + mode)
+	}
+
+	res.writeHead(200, {'Content-Type': 'text/plain'});
+	res.end();
+});	
 	
 	
 	
