@@ -32,7 +32,7 @@ function log(type) {
 
 
 var mqtt = require('mqtt');
-var mqttclient = mqtt.connect(config.mqtt.host);
+var mqttclient = mqtt.connect(config.mqtt.host, config.mqtt.options);
 
 
 
@@ -88,7 +88,7 @@ app.post('/swiftpush', function(req, res) {
 	res.end(req.connection.remoteAddress + " " + 'POST ' + device + " with " + token + " in mode " + mode);
 	console.log(req.connection.remoteAddress + " " + 'POST token registration from ' + device + " (" + version + ") with " + token + " in mode " + mode)
 
-	mqttclient.publish("push/alert", "token registration from " + device + " (" + version + ") in mode " + mode);
+	mqttclient.publish("push/message", "token registration from " + device + " (" + version + ") in mode " + mode);
 	if (mode == "sandboxReceipt") {
 		redisClient.sadd("push-tokens-devices-sand", JSON.stringify({token: token, device: device}));
 		redisClient.sadd("push-tokens-devices", JSON.stringify({token: token, device: device}));
@@ -182,13 +182,16 @@ app.get('/lightrgb/*', function(req, res) {
 	
 
 
-var mqtt = require('mqtt');
-var mqttclient = mqtt.connect(config.mqtt.host);
+var mqtt2 = require('mqtt');
+var mqttclient2 = mqtt2.connect(config.mqtt.host, {
+	username: "bridge",
+	password: "qdJ0jrkHgOUWMioMu0iOteDnhnjpqu2Riv6E2qoJAgtEUrqRwtWjVkGPuUvfbwt"
+});
 
-mqttclient.on('connect', function() {
-    mqttclient.subscribe('sensors/+/+');
+mqttclient2.on('connect', function() {
+    mqttclient2.subscribe('sensors/+/+');
         
-    mqttclient.on('message', function(topic, message) {    
+    mqttclient2.on('message', function(topic, message) {    
 	    var value = Number(message);
         topicHistory[topic] = value;
         // console.log ("adding " + topic);
