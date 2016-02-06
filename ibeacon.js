@@ -25,9 +25,9 @@ redisClient.on('ready'       , log('redis ready'));
 redisClient.on('reconnecting', log('redis reconnecting'));
 redisClient.on('error'       , log('redis error'));
 function log(type) {
-    return function() {
-        console.log(type, arguments);
-    }
+	return function() {
+		console.log(type, arguments);
+	}
 }
 
 
@@ -43,8 +43,8 @@ app.use(bodyParser());
 app.get('/', function(req, res) {
 	var now = new Date();
 	res.writeHead(200, {'Content-Type': 'text/plain'});
-  	res.end(req.method + " from " + req.connection.remoteAddress);
-    	console.log(req.connection.remoteAddress + " " + req.method + " " + now);
+	res.end(req.method + " from " + req.connection.remoteAddress);
+		console.log(req.connection.remoteAddress + " " + req.method + " " + now);
 });
 
 
@@ -64,11 +64,11 @@ app.post('/ibeacon', function(req, res) {
 	if (region != null ) { 
 		if (beacon != null ) { 
 			res.writeHead(200, {'Content-Type': 'text/plain'});
-  			res.end(region + " " + action);
+			res.end(region + " " + action);
 			console.log("beacon " + req.connection.remoteAddress + " " + region + "," + beacon + "," + major + "," + minor + " " + distance);
 		} else {
 			res.writeHead(200, {'Content-Type': 'text/plain'});
-  			res.end(region + " " + action);
+			res.end(region + " " + action);
 			console.log("region " + req.connection.remoteAddress + " " + region + " " + action);
 		}
 	}
