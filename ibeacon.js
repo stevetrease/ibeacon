@@ -110,7 +110,9 @@ app.post('/battery', function(req, res) {
 	var batterylevel = parseFloat(req.body.batterylevel);
 	var reason = req.body.reason; 
 
-	batteryHistory[device] = batterylevel;
+	batteryHistory[device] = { batteryLevel: batterylevel,
+							    batteryState: batterystate,
+							    timeStamp: new Date()};
 
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end(JSON.stringify(batteryHistory));
