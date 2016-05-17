@@ -183,10 +183,7 @@ app.get('/lightrgb/*', function(req, res) {
 
 
 var mqtt2 = require('mqtt');
-var mqttclient2 = mqtt2.connect(config.mqtt.host, {
-	username: "bridge",
-	password: "qdJ0jrkHgOUWMioMu0iOteDnhnjpqu2Riv6E2qoJAgtEUrqRwtWjVkGPuUvfbwt"
-});
+var mqttclient2 = mqtt2.connect(config.mqtt.host, config.mqtt.options);
 
 mqttclient2.on('connect', function() {
     mqttclient2.subscribe('sensors/+/+');
