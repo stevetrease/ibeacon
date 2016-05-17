@@ -101,20 +101,27 @@ app.post('/swiftpush', function(req, res) {
 });
 
 
+
+
+var batteryHistory = {};
 app.post('/battery', function(req, res) {
 	var device = req.body.device;
 	var batterystate = req.body.batterystate;
 	var batterylevel = parseFloat(req.body.batterylevel);
 	var reason = req.body.reason; 
-	
+
+	batteryHistory[device] = batterylevel;
+
 	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(req.connection.remoteAddress + " "  + 'POST ' + batterylevel.toFixed(2) + " " + batterystate + " " + device);
-	
+	res.end(JSON.stringify(batteryHistory));
+
 	console.log(req.connection.remoteAddress + " " + 'POST battery level of ' + batterylevel.toFixed(2) + " " + batterystate + " " + device + " (" + reason + ")");
 	
 	mqttclient.publish("sensors/iosbattery/" + device, batterylevel.toFixed(2));
 	mqttclient.publish("push/message", device + " is " + batterystate.toLowerCase() + " at " + batterylevel.toFixed(2) * 100 + "%");
 });
+
+
 
 
 app.post('/arduino', function(req, res) {
@@ -157,9 +164,9 @@ app.get('/lightrgb/*', function(req, res) {
 	var rgb = tags[4];
 		
 	switch(mode) {
-    	case "on":
-        	console.log("node: " + node + " on");
-        	mqttclient.publish("photon/" + node, "ffffff");
+		case "on":
+			console.log("node: " + node + " on");
+			mqttclient.publish("photon/" + node, "ffffff");
 			break;
 		case "off":
 			console.log("node: " + node + " off");
@@ -170,29 +177,28 @@ app.get('/lightrgb/*', function(req, res) {
 			mqttclient.publish("photon/" + node, rgb);
 			break;
 		default:
-        	console.log ("unknown mode: " + mode)
+			console.log ("unknown mode: " + mode)
 	}
 
 	res.writeHead(200, {'Content-Type': 'text/plain'});
 	res.end();
-});	
-	
-	
-	
-	
+});
+
+
+
 
 
 var mqtt2 = require('mqtt');
 var mqttclient2 = mqtt2.connect(config.mqtt.host, config.mqtt.options);
 
 mqttclient2.on('connect', function() {
-    mqttclient2.subscribe('sensors/+/+');
-        
-    mqttclient2.on('message', function(topic, message) {    
-	    var value = Number(message);
-        topicHistory[topic] = value;
-        // console.log ("adding " + topic);
-    });
+	mqttclient2.subscribe('sensors/+/+');
+
+	mqttclient2.on('message', function(topic, message) {
+		var value = Number(message);
+		topicHistory[topic] = value;
+		// console.log ("adding " + topic);
+	});
 });
 
 
