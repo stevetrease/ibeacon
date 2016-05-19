@@ -103,19 +103,43 @@ app.post('/swiftpush', function(req, res) {
 
 
 
-var batteryHistory = {};
+var batteryHistory = [];
 app.post('/battery', function(req, res) {
 	var device = req.body.device;
 	var batterystate = req.body.batterystate;
 	var batterylevel = parseFloat(req.body.batterylevel);
+	var uuid = req.body.uuid;
 	var reason = req.body.reason; 
 
-	batteryHistory[device] = { batteryLevel: batterylevel,
-							    batteryState: batterystate,
-							    timeStamp: new Date()};
 
-	res.writeHead(200, {'Content-Type': 'text/plain'});
-	res.end(JSON.stringify(batteryHistory));
+	var found = 0;
+	for (battery in batteryHistory) {
+		if (batteryHistory[battery].deviceName == device) {
+			batteryHistory[battery] = { deviceName: device,
+								  batteryLevel: batterylevel,
+								  batteryState: batterystate,
+								  uuid: uuid,
+								  timeStamp: new Date() / 1000
+								};
+			found = 1;
+			console.log("%");
+			break;
+		} else {
+			console.log (".");
+		}
+	}
+	if (found == 0) {
+		batteryHistory.push({ deviceName: device,
+							  batteryLevel: batterylevel,
+							  batteryState: batterystate,
+							  uuid: uuid,
+							  timeStamp: new Date() / 1000
+							});
+		console.log ("+");
+	}
+
+	// console.log (JSON.stringify(batteryHistory));
+	res.json(batteryHistory);
 
 	console.log(req.connection.remoteAddress + " " + 'POST battery level of ' + batterylevel.toFixed(2) + " " + batterystate + " " + device + " (" + reason + ")");
 	
